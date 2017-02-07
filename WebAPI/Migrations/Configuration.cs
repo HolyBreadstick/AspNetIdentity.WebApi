@@ -1,5 +1,8 @@
 namespace WebAPI.Migrations
 {
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
+    using Structure;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -13,20 +16,24 @@ namespace WebAPI.Migrations
             AutomaticMigrationDataLossAllowed = true;
         }
 
-        protected override void Seed(WebAPI.Structure.ApplicationDbContext context)
+        protected override void Seed(ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+
+            var user = new ApplicationUser()
+            {
+                UserName = "baileymiller@live.com",
+                Email = "baileymiller@live.com",
+                EmailConfirmed = true,
+                FirstName = "Bailey",
+                LastName = "Miller",
+                Level = 1,
+                JoinDate = DateTime.Now.AddYears(-20)
+            };
+
+            manager.Create(user, "MySuperP@ssword!");
         }
     }
 }
